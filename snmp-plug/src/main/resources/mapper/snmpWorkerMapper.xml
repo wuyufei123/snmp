@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--指定到dao接口 -->
+<mapper namespace="com.example.snmpplug.mapper.SnmpWorkerMapper">
+    <!--查询单个 -->
+    <insert id="insertReg" parameterType="com.example.snmpplug.model.SnmpWorker">
+        insert into snmp_worker(type,alias,firm,oid,rule,version) values(#{type},#{alias},#{firm},#{oid},#{rule},#{version});
+    </insert>
+</mapper>
