@@ -6,4 +6,23 @@
     <insert id="insertReg" parameterType="com.example.snmpplug.model.SnmpWorker">
         insert into snmp_worker(type,alias,firm,oid,rule,version) values(#{type},#{alias},#{firm},#{oid},#{rule},#{version});
     </insert>
+    <!--根据厂商查询类型-->
+    <select id="collectType" parameterType="String" resultType="java.lang.String">
+    select DISTINCT type from snmp_worker where firm=#{firm}
+    </select>
+    <!--根据类型查询指标名-->
+    <select id="collectAlias" parameterType="String" resultType="java.lang.String">
+    select DISTINCT alias from snmp_worker where type=#{type}
+    </select>
+    <!--查询所有厂商-->
+    <select id="selectAllFirm" parameterType="String" resultType="java.lang.String">
+            select distinct firm from snmp_worker
+    </select>
+    <!--根据厂商查询所有设备类型-->
+    <select id="selectAllType" parameterType="String" resultType="java.lang.String">
+            select distinct type from snmp_worker where firm=#{firm}
+    </select>
+    <select id="selectOid" parameterType="String" resultType="java.util.Map">
+            select oid,version,rule  from snmp_worker where firm=#{firm} and type=#{type} and alias=#{alias}
+    </select>
 </mapper>

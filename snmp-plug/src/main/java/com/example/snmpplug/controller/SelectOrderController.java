@@ -1,10 +1,15 @@
 package com.example.snmpplug.controller;
 
 import com.example.snmpplug.dto.SelectDatabase;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.snmpplug.service.SelectOrderService;
+import com.example.snmpplug.utils.SelectOrderUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName SelectOrderController
@@ -16,11 +21,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("select")
 public class SelectOrderController {
-    @PostMapping("SnmpCollect")
-    public String SnmpCollect(@RequestBody SelectDatabase selectDatabase) {
-        
-        return null;
-    }
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    @Autowired
+    SelectOrderUtil selectOrderUtil;
+    @Autowired
+    SelectOrderService selectOrderService;
 
+    /**
+     * 查询snmp_worker结构树firm，type
+     */
+    @RequestMapping("selectTree")
+    public List<Map<String, Object>> snmpCollectFirm(){
+        return selectOrderService.snmpCollectOfParamFirm();
+    }
+    /**
+     * 根据参数查询snmp指令并入库
+     */
+    @PostMapping("selectSnmp")
+    public boolean selectSnmpAll(@RequestBody SelectDatabase selectDatabase){
+        return  selectOrderUtil.selectSnmpAllParam(selectDatabase);
+    }
 
 }
