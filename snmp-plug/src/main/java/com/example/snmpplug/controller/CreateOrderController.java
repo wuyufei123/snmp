@@ -31,8 +31,7 @@ public class CreateOrderController {
      * @return
      */
     @PostMapping("SnmpCollect")
-    public Map<String, List<String[]>> tes(@RequestBody DadaSource listDadaSource) {
+    public Map<String, List<String[]>> snmpCollect(@RequestBody DadaSource listDadaSource) {
         return createOrderService.insertOfCollect(listDadaSource);
     }
-
 }
