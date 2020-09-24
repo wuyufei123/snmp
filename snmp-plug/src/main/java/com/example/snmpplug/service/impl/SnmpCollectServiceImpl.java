@@ -35,49 +35,50 @@ public class SnmpCollectServiceImpl implements SnmpCollectService {
     @Override
     public void snmpDataCollect(JSONObject jsonObject) {
         //采集数据
-        JSONObject collectObject=new JSONObject();
+        JSONObject collectObject = new JSONObject();
         //分割参数
-        JSONObject regxObject=new JSONObject();
-        ArrayList arrayList=new ArrayList();
-        boolean flag=true;
+        JSONObject regxObject = new JSONObject();
+        ArrayList arrayList = new ArrayList();
+        //标志位
+        boolean flag = true;
         String ip = (String) jsonObject.get("IP");
         String performance = (String) jsonObject.get("PERFORMANCE");
         String community = (String) jsonObject.get("COMMUNITY");
         String type = (String) jsonObject.get("TYPE");
         String catagory = (String) jsonObject.get("CATAGORY");
-        collectObject.put("IP",ip);
-        collectObject.put("COMMUNITY",community);
+        collectObject.put("IP", ip);
+        collectObject.put("COMMUNITY", community);
         List<SnmpInfo> snmpInfoList = snmpInfoRepository.selectSnmpInfosByConditions(catagory, type, performance);
-        JSONObject[] formatArray=new JSONObject[snmpInfoList.size()];
+        JSONObject[] formatArray = new JSONObject[snmpInfoList.size()];
         for (SnmpInfo snmpInfo : snmpInfoList) {
             String protocol = snmpInfo.getProtocol();
             String oid = snmpInfo.getOid();
-            collectObject.put("PROTOCOL",protocol);
-            collectObject.put("OID",oid);
+            collectObject.put("PROTOCOL", protocol);
+            collectObject.put("OID", oid);
             BufferedReader bufferedReader = snmpCollect.collect(collectObject);
             String midRegx = snmpInfo.getMidRegx();
             String indexRegx = snmpInfo.getIndexRegx();
             String indexNum = snmpInfo.getIndexNum();
             String valueRegx = snmpInfo.getValueRegx();
             String valueNum = snmpInfo.getValueNum();
-            regxObject.put("MIDREGX",midRegx);
-            regxObject.put("INDEXREGX",indexRegx);
-            regxObject.put("INDEXNUM",indexNum);
-            regxObject.put("VALUEREGX",valueRegx);
-            regxObject.put("VALUENUM",valueNum);
+            regxObject.put("MIDREGX", midRegx);
+            regxObject.put("INDEXREGX", indexRegx);
+            regxObject.put("INDEXNUM", indexNum);
+            regxObject.put("VALUEREGX", valueRegx);
+            regxObject.put("VALUENUM", valueNum);
             //查询索引
-            if(flag){
-                 arrayList = snmpHandle.index(bufferedReader, regxObject);
-                 flag=false;
+            if (flag) {
+                arrayList = snmpHandle.index(bufferedReader, regxObject);
+                flag = false;
             }
             //数据处理
             JSONObject handleObject = snmpHandle.handle(bufferedReader, regxObject);
             //存入数组
-            formatArray[snmpInfoList.indexOf(snmpInfo)]=handleObject;
+            formatArray[snmpInfoList.indexOf(snmpInfo)] = handleObject;
         }
         //格式化数据
         String formatData = snmpFormat.format(arrayList, formatArray);
         //数据入库
-        snmpDataRepository.saveSnmpDataById(ip,performance,formatData);
+        snmpDataRepository.saveSnmpDataById(ip, performance, formatData);
     }
 }

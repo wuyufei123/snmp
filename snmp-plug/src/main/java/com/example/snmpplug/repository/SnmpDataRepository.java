@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface SnmpDataRepository {
     @Insert(
-            "insert into snmp_data" +"(ip,performance,value)"+"values"+"(#{ip},#{performance},#{value})"
+            "insert into snmp_data" + "(ip,performance,value)" + "values" + "(#{ip},#{performance},#{value})"
     )
-    int saveSnmpDataById(String ip,String performance,@Param("value") String value);
+    int saveSnmpDataById(String ip, String performance, @Param("value") String value);
 }
