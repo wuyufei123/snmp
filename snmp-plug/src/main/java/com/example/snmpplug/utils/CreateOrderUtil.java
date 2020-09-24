@@ -55,28 +55,22 @@ public class CreateOrderUtil {
      * {
      * "ip": "1",
      * "password": "1",
-     * "version": "0",
-     * "firm": "0",
-     * "type": "0",
+     * "version": "2V",
+     * "firm": "HUAWEI",
+     * "type": "CE4000",
+     * "alias": "cpu",
      * "oidList": [
      * {
-     * "rule": [
-     * "1",
-     * "2"
-     * ],
-     * "index": "42312523",
-     * "oid": "123123123"
+     * "rule": "1,5",
+     * "index": "index1",
+     * "oid": "oid1"
      * },
      * {
-     * "rule": [
-     * "1",
-     * "2"
-     * ],
-     * "index": "42312523",
-     * "oid": "uajscasc"
+     * "rule": "9,15",
+     * "index": "index2",
+     * "oid": "oid2"
      * }
-     * ],
-     * "alias": "123"
+     * ]
      * }
      */
 
@@ -115,16 +109,15 @@ public class CreateOrderUtil {
             String index = listAll.getIndex();
             //oid
             String oid = listAll.getOid();
-            // String line = null;
-            String line = "SNMPv2-SMI::mib-2.47.1.1.1.1.5.16847367 = INTEGER: 10";
+            String line = null;
+            //String line = "SNMPv2-SMI::mib-2.47.1.1.1.1.5.16847367 = INTEGER: 10";
             //判断是展示还是新增
             //展示10行
             List<String[]> list = new ArrayList<>();
             int i = 0;
             if (rule.split(",")[0].trim().isEmpty()) {
                 br = snmpCa(community, ip, oid, version, index);
-                /*while ((line = br.readLine()) != null) {*/
-                while (true) {
+                while ((line = br.readLine()) != null) {
                     if (i < 10) {
                         //处理过滤指定字符
                         list.add(regx(line));
